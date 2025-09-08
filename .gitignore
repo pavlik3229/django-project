@@ -10,13 +10,11 @@ __pycache__/
 *.pot
 *.pyc
 media/
-staticfiles/
+static/
 db.sqlite3
 
 # Virtual environment
-venv/
-env/
-.env
+djvenv/
 
 # PyCharm
 .idea/

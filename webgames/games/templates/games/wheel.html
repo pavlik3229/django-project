@@ -1,0 +1,11 @@
+
+<div class="container">
+    <div class="wheel">
+        {% for num, color in fields.items %}
+            <div class="field" style="--i:{{ forloop.counter }};--clr:{{ color }}">
+                <span>{{ num }}</span>
+            </div>
+        {% endfor %}
+        <div class="spin-button"></div>
+    </div>
+</div>

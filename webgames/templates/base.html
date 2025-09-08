@@ -1,0 +1,31 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ title }}</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="shortcut icon" href="{% static 'games/images/main.ico' %}" type="image/x-icon"/>
+    <link type="text/css" href="{% static 'games/css/styles.css' %}" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        {% include 'header.html' %}
+    </header>
+    <aside>
+        {% include 'sidebar.html' %}
+    </aside>
+    <main>
+
+        <section class="main_content">
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+
+    <footer>
+        {% include 'footer.html' %}
+    </footer>
+</body>
+</html>
