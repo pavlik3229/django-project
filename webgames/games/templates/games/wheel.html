@@ -1,11 +1,24 @@
 
 <div class="container">
+    <div class="indicator"></div>
     <div class="wheel">
         {% for num, color in fields.items %}
             <div class="field" style="--i:{{ forloop.counter }};--clr:{{ color }}">
                 <span>{{ num }}</span>
             </div>
         {% endfor %}
-        <div class="spin-button"></div>
     </div>
+    <div class="spin-btn">Spin</div>
 </div>
+
+
+<script>
+    let wheel = document.querySelector('.wheel');
+    let spinBtn = document.querySelector('.spin-btn');
+    let value = Math.ceil(Math.random() * 1800);
+
+    spinBtn.onclick = function () {
+        wheel.style.transform = "rotate(" + value +"deg)";
+        value += Math.ceil(Math.random() * 3600);
+    }
+</script>
