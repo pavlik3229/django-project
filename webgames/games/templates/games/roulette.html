@@ -2,7 +2,65 @@
 {% load games_tags %}
 
 {% block content %}
-{#    <h1>{{ title }}</h1>#}
+    <h1>{{ title }}</h1>
     
     {% show_wheel %}
+    
+    <div class="betting-board">
+         <form action="" method="POST">
+             {% csrf_token %}
+
+            {{ form.as_p }}
+         
+
+            <div class="roulette-bet-choise">
+                {% for num, color in fields_in_order.items %}
+                    {% if num == '0' %}
+                        <div class="r-num" data-value="{{ num }}" style="background: green; height: 150px; grid-row: span 3;">{{ num }}</div>
+                    {% else %}
+                        <div class="r-num" data-value="{{ num }}" style="background: {{ color }}">{{ num }}</div>
+                    {% endif %}
+                {% endfor %}
+                    <div class="row" style="">2to1</div>
+                    <div class="row" style="">2to1</div>
+                    <div class="row" style="">2to1</div>
+                    <div class="twelve-row">
+                        <div class="twelve">1st 12</div>
+                        <div class="twelve">2nd 12</div>
+                        <div class="twelve">3d 12</div>
+                    </div>
+                    <div class="bottom-row">
+                        <div class="low">1-18</div>
+                        <div class="even">EVEN</div>
+                        <div class="black" style="background: black">black</div>
+                        <div class="red" style="background: red">red</div>
+                        <div class="odd">ODD</div>
+                        <div class="high">19-36</div>
+                    </div>
+            </div>
+             
+            <button type="submit">Apply bet</button>
+        </form>
+    </div>
 {% endblock %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const input = document.getElementById("id_single");
+        const buttons = document.querySelectorAll(".r-num");
+
+        function updateInput() {
+            const selectedValues = Array.from(buttons)
+                .filter(btn => btn.classList.contains("active"))
+                .map(btn => btn.dataset.value);
+            input.value = selectedValues.join(",");
+        }
+
+        buttons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                btn.classList.toggle("active");
+                updateInput();
+            });
+        });
+    });
+</script>

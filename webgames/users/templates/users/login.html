@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h1 style="margin-bottom: 20px">Login form</h1>
+ 
+    <form action="" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <div class="form-error">{{ form.non_field_errors }}</div>
+        {% for f in form %}
+            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
+            <div class="form-error">{{ f.errors }}</div>
+        {% endfor %}
+    <button type="submit">Log in</button>
+    </form>
+    <hr>
+    <a href="#">Forgot password?</a>
+    <p>Dont have account? <a href="{% url 'users:register' %}">Sign up</a></p>
+ 
+{% endblock %}

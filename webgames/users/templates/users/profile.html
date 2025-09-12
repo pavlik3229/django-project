@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>You profile</h1>
+    
+     <form action="" method="POST">
+         {% csrf_token %}
+         {% csrf_token %}
+         <input type="hidden" name="next" value="{{ next }}">
+         <div class="form-error">{{ form.non_field_errors }}</div>
+         {% for f in form %}
+            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
+            <div class="form-error">{{ f.errors }}</div>
+        {% endfor %}
+         <p>Your balance is {{ balance }} coins</p>
+         <p>Date of birth: {{ date_of_birth }}</p>
+        <button type="submit">Safe</button>
+    </form>
+    
+    <form method="post" action="{% url 'users:logout' %}" style="margin-top: 10px">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+    
+    <hr>
+    <p style="margin: 20px"><a href="#">Change password</a></p>
+
+{% endblock %}

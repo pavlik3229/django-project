@@ -1,4 +1,5 @@
 from django import forms
 
 class RouletteBetForm(forms.Form):
-    pass
+    single = forms.CharField(widget=forms.HiddenInput())
+    bet_amount = forms.IntegerField(label="Bet amount")
