@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% include  'games/_wheel_board.html' %}
+    <script src="{% static 'games/js/wheel_script.js' %}"></script>
+{% endblock %}

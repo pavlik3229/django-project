@@ -13,5 +13,10 @@ fields = {  "0": "green",
         "35": "black", "3": "red", "26": "black",
     }
 
+
 fields_in_order = {num: fields[num] for num in sorted(fields.keys(), key=int)}
+
+coordinates = {num: ((360 / 37) * (i - 1), (360 / 37) * i)  for num, i in zip(map(int, fields.keys()), range(1, 38))}
+
+
 

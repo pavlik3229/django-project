@@ -31,15 +31,12 @@ class RegisterUserForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        print(email)
         if get_user_model().objects.filter(email=email).exists():
             raise forms.ValidationError('User with this email already exists')
         return email
 
     def clean_date_of_birth(self):
         date = self.cleaned_data['date_of_birth']
-        print(date)
-        print(type(date))
         if age_validator(date):
             return date
         raise forms.ValidationError("Invalid age")

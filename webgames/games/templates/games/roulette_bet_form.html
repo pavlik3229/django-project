@@ -1,19 +1,7 @@
-{% block roulette_bet %}
-    
- <form action="" method="POST">
-     {% csrf_token %}
-     <input type="hidden" name="next" value="{{ next }}">
-     <div class="form-error">{{ form.non_field_errors }}</div>
-     {{ form.single }}
-     <label for="id_bet_amount">Bet amount</label>
-     {{ form.bet_amount }}
-     
-    <div class="roulette-bet-choise">
-        {% for num, color in fields_in_order.items %}
-            <div class="r-num" style="background: {{ color }}">{{ num }}</div>
-        {% endfor %}
-    </div>
-     
-    <button type="submit">Apply bet</button>
-    </form>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'games/_wheel_board.html' %}
+    <script src="{% static 'games/js/bet_script.js' %}"></script>
 {% endblock %}
