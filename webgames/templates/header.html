@@ -5,7 +5,7 @@
     <li><a href="{% url 'contacts' %}">Contacts</a></li>
     <li><a href="{% url 'about' %}">About</a></li>
     {% if user.is_authenticated %}
-        <li style="color: gold">{{ user.profile.balance }} coins</li>
+        <li id='balance'>{{ user.profile.balance }} coins</li>
     {% endif %}
     <li class="user">
         {% if user.is_authenticated %}

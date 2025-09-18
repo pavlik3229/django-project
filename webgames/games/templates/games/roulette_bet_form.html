@@ -2,6 +2,63 @@
 {% load static %}
 
 {% block content %}
-    {% include 'games/_wheel_board.html' %}
+    
+
+<div class="container">
+    <div class="indicator"></div>
+    <div class="wheel">
+        {% for num, color in fields.items %}
+            <div class="field" style="--i:{{ forloop.counter }};--clr:{{ color }}">
+                <span>{{ num }}</span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="betting-board">
+     <form action="" method="POST">
+         {% csrf_token %}
+
+        {{ form.as_p }}
+     
+        {% if bet_amount %}
+            <p>Your bet is {{ bet_amount }} coins.</p>
+            <p>bet_type: {{ bet_type }}</p>
+            <p>bet_value: {{ bet_value }}</p>
+            <p>result_value: {{ result_value }}</p>
+            {% if is_win %}
+                <p>Win</p>
+            {% else %}
+                <p>Lose</p>
+            {% endif %}
+        {% endif %}
+        <div class="roulette-bet-choise">
+            {% for num, color in fields_in_order.items %}
+                {% if num == '0' %}
+                    <div class="r-num" data-value="{{ num }}" style="background: green; height: 150px; grid-row: span 3;">{{ num }}</div>
+                {% else %}
+                    <div class="r-num" data-value="{{ num }}" style="background: {{ color }}">{{ num }}</div>
+                {% endif %}
+            {% endfor %}
+                <div class="col" data-value="0" style="">1 col</div>
+                <div class="col" data-value="1" style="">2 col</div>
+                <div class="col" data-value="2" style="">3 col</div>
+                <div class="twelve-row">
+                    <div class="twelve" data-value="0">1st 12</div>
+                    <div class="twelve" data-value="1">2nd 12</div>
+                    <div class="twelve" data-value="2">3d 12</div>
+                </div>
+                <div class="bottom-row">
+                    <div class="low-high" data-value="0">1-18</div>
+                    <div class="even-odd" data-value="0">EVEN</div>
+                    <div class="color" data-value="0" style="background: black">black</div>
+                    <div class="color" data-value="1" style="background: red">red</div>
+                    <div class="even-odd" data-value="1">ODD</div>
+                    <div class="low-high" data-value="1">19-36</div>
+                </div>
+        </div>
+        <button type="submit">Apply bet</button>
+    </form>
+</div>
     <script src="{% static 'games/js/bet_script.js' %}"></script>
 {% endblock %}

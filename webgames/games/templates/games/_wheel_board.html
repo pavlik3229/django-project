@@ -20,8 +20,14 @@
      
         {% if bet_amount %}
             <p>Your bet is {{ bet_amount }} coins.</p>
-            <p>{{ bet_type }}</p>
-            <p>{{ bet_value }}</p>
+            <p>bet_type: {{ bet_type }}</p>
+            <p>bet_value: {{ bet_value }}</p>
+            <p>result_value: {{ result_value }}</p>
+            {% if is_win %}
+                <p>Win</p>
+            {% else %}
+                <p>Lose</p>
+            {% endif %}
         {% endif %}
         <div class="roulette-bet-choise">
             {% for num, color in fields_in_order.items %}
@@ -48,7 +54,6 @@
                     <div class="high">19-36</div>
                 </div>
         </div>
-         
         <button type="submit">Apply bet</button>
     </form>
 </div>

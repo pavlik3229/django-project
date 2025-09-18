@@ -2,6 +2,115 @@
 {% load static %}
 
 {% block content %}
-    {% include  'games/_wheel_board.html' %}
-    <script src="{% static 'games/js/wheel_script.js' %}"></script>
+    
+
+<div class="container">
+    <div class="indicator"></div>
+    <div class="wheel">
+        {% for num, color in fields.items %}
+            <div class="field" style="--i:{{ forloop.counter }};--clr:{{ color }}">
+                <span>{{ num }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="spin-btn">Spin</div>
+</div>
+
+<div class="betting-board">
+    <p>Your bet is {{ bet_amount }} coins.</p>
+{#    <p>bet_type: {{ bet_type }}</p>#}
+{#    <p>bet_value: {{ bet_value }}</p>#}
+{#    <p>result_value: {{ result_value }}</p>#}
+
+    {% if bet_amount %}
+        <div id="result" class="hidden">
+            {% if is_win %}
+                <p style="color: gold; font-size: 30px; font-weight: 800">You win {{ win_value }} coins</p>
+            {% else %}
+                <p style="color: red; font-size: 30px; font-weight: 800;">You lose</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div class="roulette-bet-choise">
+        {% for num, color in fields_in_order.items %}
+            {% if num == '0' %}
+                <div class="r-num" data-value="{{ num }}" style="background: green; height: 150px; grid-row: span 3;">{{ num }}</div>
+            {% else %}
+                <div class="r-num" data-value="{{ num }}" style="background: {{ color }}">{{ num }}</div>
+            {% endif %}
+        {% endfor %}
+            <div class="col" data-value="0" style="">1 col</div>
+            <div class="col" data-value="1" style="">2 col</div>
+            <div class="col" data-value="2" style="">3 col</div>
+            <div class="twelve-row">
+                <div class="twelve" data-value="0">1st 12</div>
+                <div class="twelve" data-value="1">2nd 12</div>
+                <div class="twelve" data-value="2">3d 12</div>
+            </div>
+            <div class="bottom-row">
+                <div class="low-high" data-value="0">1-18</div>
+                <div class="even-odd" data-value="0">EVEN</div>
+                <div class="color" data-value="0" style="background: black">black</div>
+                <div class="color" data-value="1" style="background: red">red</div>
+                <div class="even-odd" data-value="1">ODD</div>
+                <div class="low-high" data-value="1">19-36</div>
+            </div>
+    </div>
+</div>
+    <a class="new-game-btn" href="{% url 'roulette' %}">New game</a>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('balance').textContent = "{{ past_balance }} coins";
+            
+            let wheel = document.querySelector('.wheel');
+            let spinBtn = document.querySelector('.spin-btn');
+            let offset = 40;
+            let value = -parseInt('{{ result_value }}') + offset - 360;
+            
+            wheel.style.transition = "none";
+            wheel.style.transform = "rotate(" + offset +"deg)";
+        
+            spinBtn.onclick = function () {
+                wheel.style.transition = "transform 5s ease";
+                wheel.style.transform = "rotate(" + value +"deg)";
+                
+                
+                setTimeout(() => {
+                    const result = document.getElementById('result');
+                    if (result) { result.classList.remove('hidden'); }
+                    
+                    document.getElementById('balance').textContent = "{{ user.profile.balance }} coins";
+                    }, 5000);
+                
+            }
+        
+            // betting board
+            const betType = "{{ bet_type }}".toString();
+            const betValue = "{{ bet_value }}".toString();
+        
+            let target = null;
+        
+            document.querySelectorAll(".r-num, .color, .even-odd, .low-high, .twelve, .col").forEach(opt => opt.classList.add('no-hover'));
+            
+            if (betType === "0") {
+                target = document.querySelector(`.r-num[data-value="${betValue}"]`);
+            } else if (betType === "1") {
+                target = document.querySelector(`.color[data-value="${betValue}"]`);
+            } else if (betType === "2") {
+                target = document.querySelector(`.even-odd[data-value="${betValue}"]`);
+            } else if (betType === "3") {
+                target = document.querySelector(`.low-high[data-value="${betValue}"]`);
+            } else if (betType === "4") {
+                target = document.querySelector(`.twelve[data-value="${betValue}"]`);
+            } else if (betType === "5") {
+                target = document.querySelector(`.col[data-value="${betValue}"]`);
+            } 
+            
+            if (target) {
+                target.classList.add('active');
+            }
+        });
+    </script>
 {% endblock %}
