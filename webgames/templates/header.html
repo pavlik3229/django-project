@@ -4,6 +4,7 @@
     <li class="logo"><a href="{% url 'home' %}"></a></li>
     <li><a href="{% url 'contacts' %}">Contacts</a></li>
     <li><a href="{% url 'about' %}">About</a></li>
+    <li><a href="{% url 'history' %}">Games history</a></li>
     {% if user.is_authenticated %}
         <li id='balance'>{{ user.profile.balance }} coins</li>
     {% endif %}

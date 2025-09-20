@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2 style="margin-bottom: 30px">Games history</h2>
+    {% for game in games %}
+        <p><b>Game ID:</b> {{ game.id }}</p>
+        <p><b>Bet Amount:</b> {{ game.bet_amount }}</p>
+        <p><b>Bet Type:</b> {{ game.get_bet_type_display }}</p>
+        <p><b>Bet Value:</b> {{ game.bet_value_display }}</p>
+        <p><b>Result Value:</b> {{ game.result_value }} deg</p>
+        <p><b>Is Win:</b> {{ game.is_win }}</p>
+        {% if game.is_win %}
+            <p><b>Payout:</b> {{ game.win_value }} coins</p>
+        {% endif %}
+        <p><b>Time:</b> {{ game.time_create }}</p>
+        <hr>
+    {% endfor %}
+{% endblock %}
+
+{% block navigation %}
+    {% if page_obj.has_other_pages %}
+        <nav class="list-pages">
+            <ul>
+                {% if page_obj.has_previous %}
+                    <li class="page-num">
+                        <a href="?page={{ page_obj.previous_page_number }}">«</a>
+                    </li>
+                {% endif %}
+
+                {% for p in paginator.page_range %}
+                    {% if p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                        <li class="page-num {% if p == page_obj.number %}active{% endif %}">
+                            <a href="?page={{ p }}">{{ p }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-num">
+                        <a href="?page={{ page_obj.next_page_number }}">»</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}

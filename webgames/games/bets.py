@@ -49,6 +49,47 @@ coordinates = {0: (0.0, 9.72972972972973),
                7: (301.6216216216216, 311.35135135135135), 28: (311.35135135135135, 321.0810810810811), 12: (321.0810810810811, 330.81081081081084),
                35: (330.81081081081084, 340.5405405405405), 3: (340.5405405405405, 350.27027027027026), 26: (350.27027027027026, 360.0)}
 
+
+colors = {
+    0: 'black',
+    1: 'red'
+}
+
+
+even_odd = {
+    0: 'even',
+    1: 'odd'
+}
+
+
+low_high = {
+    0: 'low',
+    1: 'high'
+}
+
+
+dozens = {
+    0: '1st 12',
+    1: '2nd 12',
+    2: '3rd 12'
+}
+
+
+columns = {
+    0: '1st column',
+    1: '2nd column',
+    2: '3rd column'
+}
+
+bets_variants = {
+    0: [str(i) for i in range(37)],
+    1: colors,
+    2: even_odd,
+    3: low_high,
+    4: dozens,
+    5: columns,
+}
+
 splits = {
     # horizontal
     (1, 2): 0, (2, 3): 1,
@@ -128,13 +169,15 @@ win_values = {
     9: 6,
 }
 
-combo_veriants = {
-    0: range(37),
+combo_variants = {
+
     6: splits,
     7: streets,
     8: corners,
     9: lines,
 }
+
+
 
 
 
@@ -154,7 +197,7 @@ def is_win(spin: RouletteSpin) -> bool:
     return types[int(spin.bet_type)](spin)
 
 def combos_win(spin: RouletteSpin) -> bool:
-    target_nums = [key for key in combo_veriants[spin.bet_type] if combo_veriants[spin.bet_type][key] == spin.bet_value][0]
+    target_nums = [key for key in combo_variants[spin.bet_type] if combo_variants[spin.bet_type][key] == spin.bet_value][0]
     win_ranges = [coordinates[num] for num in target_nums]
     win = any([start < spin.result_value < end for start, end in win_ranges])
     if win:
@@ -230,42 +273,6 @@ def column_win(spin: RouletteSpin) -> bool:
         spin.user.profile.balance += spin.win_value
     return win
 
-
-# def split_win(spin: RouletteSpin) -> bool:
-#     target_nums = [key for key in splits if splits[key] == spin.bet_value]
-#     win_ranges = [coordinates[num] for num in target_nums]
-#     win = any([start < spin.result_value < end for start, end in win_ranges])
-#     if win:
-#         spin.win_value = spin.bet_amount * 17 + spin.bet_amount
-#         spin.user.profile.balance += spin.win_value
-#     return win
-#
-# def street_win(spin: RouletteSpin) -> bool:
-#     target_nums = [key for key in streets if streets[key] == spin.bet_value]
-#     win_ranges = [coordinates[num] for num in target_nums]
-#     win = any([start < spin.result_value < end for start, end in win_ranges])
-#     if win:
-#         spin.win_value = spin.bet_amount * 11 + spin.bet_amount
-#         spin.user.profile.balance += spin.win_value
-#     return win
-#
-# def corner_win(spin: RouletteSpin) -> bool:
-#     target_nums = [key for key in streets if streets[key] == spin.bet_value]
-#     win_ranges = [coordinates[num] for num in target_nums]
-#     win = any([start < spin.result_value < end for start, end in win_ranges])
-#     if win:
-#         spin.win_value = spin.bet_amount * 8 + spin.bet_amount
-#         spin.user.profile.balance += spin.win_value
-#     return win
-#
-# def line_win(spin: RouletteSpin) -> bool:
-#     target_nums = [key for key in streets if streets[key] == spin.bet_value]
-#     win_ranges = [coordinates[num] for num in target_nums]
-#     win = any([start < spin.result_value < end for start, end in win_ranges])
-#     if win:
-#         spin.win_value = spin.bet_amount * 5 + spin.bet_amount
-#         spin.user.profile.balance += spin.win_value
-#     return win
 
 
 

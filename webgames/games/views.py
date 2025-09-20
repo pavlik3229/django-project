@@ -1,12 +1,13 @@
 import random
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, ListView
 from .forms import RouletteBetForm
 from .bets import is_win, fields, fields_in_order
 from .models import RouletteSpin, User
-from .bets import *
+from .bets import bet_dict, combo_variants, bets_variants
 
 
 class HomePage(TemplateView):
@@ -44,7 +45,7 @@ class RouletteBet(FormView):
         else:
             form_value = form.cleaned_data[bet_dict[bet_type]]
 
-            bet_value = combo_veriants[int(bet_type)][tuple(sorted(int(i) for i in form_value.split('-')))]
+            bet_value = combo_variants[int(bet_type)][tuple(sorted(int(i) for i in form_value.split('-')))]
 
         user = self.request.user
         if user.is_authenticated:
@@ -88,7 +89,7 @@ def roulette_spin(request, spin_id):
         bet_value = spin.bet_value
 
         if spin.bet_type >=6:
-            bet_value  = list([k for k, v in combo_veriants[spin.bet_type].items() if v == spin.bet_value][0])
+            bet_value  = list([k for k, v in combo_variants[spin.bet_type].items() if v == spin.bet_value][0])
     else:
         return redirect('roulette')
 
@@ -104,6 +105,30 @@ def roulette_spin(request, spin_id):
         'win_value': spin.win_value,
         'past_balance': request.session['past_balance'],
     })
+
+class GamesHistory(LoginRequiredMixin, ListView):
+    model = RouletteSpin
+    template_name = 'games/games_history.html'
+    context_object_name = 'games'
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        for game in context['games']:
+            if game.bet_type in combo_variants:
+                collection = combo_variants[game.bet_type]
+                game.bet_value_display = [k for k in collection if collection[k] == game.bet_value][0]
+            else:
+
+                game.bet_value_display = bets_variants[game.bet_type][game.bet_value]
+
+        return context
+
+    def get_queryset(self):
+        games_list = RouletteSpin.objects.filter(user=self.request.user)
+        return games_list
+
 
 
 def contacts(request):

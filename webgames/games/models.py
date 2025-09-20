@@ -11,6 +11,11 @@ class RouletteSpin(models.Model):
         EVEN_ODD= 2, 'Even/Odd'
         LOW_HIGH = 3, 'Low/High'
         DOZENS = 4, 'Dozens'
+        COLUMNS = 5, 'Columns'
+        SPLITS = 6, 'Splits'
+        STREETS = 7, 'Streets'
+        CORNERS = 8, 'Corners'
+        LINES = 9, 'Six lines'
 
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='spins', verbose_name='user')
     bet_amount = models.IntegerField(default=10, verbose_name='Bet amount')
