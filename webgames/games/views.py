@@ -38,6 +38,13 @@ class RouletteBet(FormView):
     def form_valid(self, form):
         bet = form.cleaned_data['bet_amount']
         bet_type = form.cleaned_data['bet_type']
+        print(bet_type)
+        if bet_type <= 5:
+            bet_value = form.cleaned_data[bet_dict[bet_type]]
+        else:
+            form_value = form.cleaned_data[bet_dict[bet_type]]
+
+            bet_value = combo_veriants[int(bet_type)][tuple(sorted(int(i) for i in form_value.split('-')))]
 
         user = self.request.user
         if user.is_authenticated:
@@ -51,7 +58,7 @@ class RouletteBet(FormView):
             user=user,
             bet_amount=bet,
             bet_type=bet_type,
-            bet_value=form.cleaned_data[bet_dict[bet_type]],
+            bet_value=bet_value,
 
         )
         self.spin = spin
@@ -77,8 +84,12 @@ def roulette_spin(request, spin_id):
 
         spin.save()
         spin.user.profile.save()
-    else:
 
+        bet_value = spin.bet_value
+
+        if spin.bet_type >=6:
+            bet_value  = list([k for k, v in combo_veriants[spin.bet_type].items() if v == spin.bet_value][0])
+    else:
         return redirect('roulette')
 
     return render(request, 'games/roulette_spin_form.html',
@@ -87,7 +98,7 @@ def roulette_spin(request, spin_id):
         'fields_in_order': fields_in_order,
         'bet_amount': spin.bet_amount,
         'bet_type': spin.bet_type,
-        'bet_value': spin.bet_value,
+        'bet_value': bet_value,
         'is_win': spin.is_win,
         'result_value': spin.result_value,
         'win_value': spin.win_value,
